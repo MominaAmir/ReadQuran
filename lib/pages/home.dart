@@ -8,8 +8,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:read_quran/model/ayatModel.dart';
 import 'package:http/http.dart' as http;
+import 'package:read_quran/model/bookmarkModel.dart';
+import 'package:read_quran/pages/bookmarkPage.dart';
 import 'package:read_quran/pages/quran.dart';
-import 'package:read_quran/pages/page2.dart';
+import 'package:read_quran/pages/translationPage.dart';
 import 'package:read_quran/pages/prayer.dart';
 import 'package:hijri/hijri_calendar.dart';
 
@@ -226,7 +228,7 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   int selectedindex = 0;
-  final List<Widget> _widget = [const HomePage(), const Quranpage(), const PageTwo(), const Prayers()];
+  final List<Widget> _widget = [const HomePage(), const Quranpage(), const Translation(), const Prayers(),  BookmarksPage()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -235,8 +237,9 @@ class _BottomBarState extends State<BottomBar> {
         items: [
           const TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Image.asset("lib/assets/quran.png"), title: 'Quran'),
-          const TabItem(icon: Icons.audiotrack, title: 'Audio'),
+          const TabItem(icon: Icons.translate, title: 'Translation'),
           const TabItem(icon: Icons.mosque, title: 'Prayer'),
+          const TabItem(icon: Icons.bookmark, title: 'BookMark'),
         ],
         onTap: updateIndex,
         backgroundColor: Colors.green,

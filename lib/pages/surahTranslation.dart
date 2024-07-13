@@ -7,18 +7,18 @@ import 'package:read_quran/model/juzModel..dart';
 import 'package:http/http.dart' as http;
 import 'package:read_quran/model/surahModel.dart';
 
-class SurahScreen extends StatefulWidget {
+class SurahTranslationPage extends StatefulWidget {
   static const String id = 'juz';
-  const SurahScreen({super.key,});
+  const SurahTranslationPage({super.key});
 
   @override
-  State<SurahScreen> createState() => _SurahScreenState();
+  State<SurahTranslationPage> createState() => _SurahTranslationPageState();
 }
 
-class _SurahScreenState extends State<SurahScreen> {
-  Future<SurahModel> getSurah(int index)async{
+class _SurahTranslationPageState extends State<SurahTranslationPage> {
+  Future<SurahModel> getSurahTranslation(int index)async{
     
-  String surahendpoint = 'https://api.alquran.cloud/v1/surah/$index';
+  String surahendpoint = 'https://api.alquran.cloud/v1/surah/$index/en.asad';
   final res = await http.get(Uri.parse(surahendpoint));
   if(res.statusCode == 200){
     return SurahModel.fromJSON(json.decode(res.body));
@@ -41,6 +41,7 @@ class _SurahScreenState extends State<SurahScreen> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -61,7 +62,7 @@ class _SurahScreenState extends State<SurahScreen> {
         ],
         ),
         body: FutureBuilder(
-          future: getSurah(Constants.SurahIndex!), 
+          future: getSurahTranslation(Constants.SurahIndex!), 
           builder: (context, AsyncSnapshot<SurahModel> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator(),);
@@ -70,7 +71,7 @@ class _SurahScreenState extends State<SurahScreen> {
               return ListView.builder(
                 itemCount: snapshot.data!.surahModel.length,
                 itemBuilder: (context, index){
-                  return CustomListTileSurah(index: index, list: snapshot.data!.surahModel, fontsize: _fontSize, );
+                  return CustomListTileSurah(index: index, list: snapshot.data!.surahModel, fontsize: _fontSize,);
                 });
             }
             else{

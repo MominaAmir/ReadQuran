@@ -5,26 +5,26 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:read_quran/model/constaant.dart';
 import 'package:read_quran/model/juzModel..dart';
 import 'package:http/http.dart' as http;
-import 'package:read_quran/model/surahModel.dart';
 
-class SurahScreen extends StatefulWidget {
+class JuzTranslationPage extends StatefulWidget {
   static const String id = 'juz';
-  const SurahScreen({super.key,});
+  const JuzTranslationPage({super.key ,});
 
   @override
-  State<SurahScreen> createState() => _SurahScreenState();
+  State<JuzTranslationPage> createState() => _JuzTranslationPageState();
 }
 
-class _SurahScreenState extends State<SurahScreen> {
-  Future<SurahModel> getSurah(int index)async{
+class _JuzTranslationPageState extends State<JuzTranslationPage> {
+  Future<JuzModel> getJuzzTranslation(int index)async{
     
-  String surahendpoint = 'https://api.alquran.cloud/v1/surah/$index';
-  final res = await http.get(Uri.parse(surahendpoint));
+  String juzendpoint = 'https://api.alquran.cloud/v1/juz/$index/en.asad ';
+  final res = await http.get(Uri.parse(juzendpoint));
   if(res.statusCode == 200){
-    return SurahModel.fromJSON(json.decode(res.body));
+    return JuzModel.fromJSON(json.decode(res.body));
   }else{
     throw("failed to load data");
   }
+
   }
 
   double _fontSize = 16.0;
@@ -47,7 +47,7 @@ class _SurahScreenState extends State<SurahScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Surahs', style: GoogleFonts.acme(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),),
+          title: Text('Juz', style: GoogleFonts.acme(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),),
           backgroundColor: Colors.green,
            actions: [
           IconButton(
@@ -61,16 +61,16 @@ class _SurahScreenState extends State<SurahScreen> {
         ],
         ),
         body: FutureBuilder(
-          future: getSurah(Constants.SurahIndex!), 
-          builder: (context, AsyncSnapshot<SurahModel> snapshot) {
+          future: getJuzzTranslation(Constants.juzIndex!), 
+          builder: (context, AsyncSnapshot<JuzModel> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator(),);
             } else if(snapshot.hasData){
-              print('${snapshot.data!.surahModel.length} length');
+              print('${snapshot.data!.juzayahs.length} length');
               return ListView.builder(
-                itemCount: snapshot.data!.surahModel.length,
+                itemCount: snapshot.data!.juzayahs.length,
                 itemBuilder: (context, index){
-                  return CustomListTileSurah(index: index, list: snapshot.data!.surahModel, fontsize: _fontSize, );
+                  return CustomListTileJuzTranslation(index: index, list: snapshot.data!.juzayahs, fontSize: _fontSize,);
                 });
             }
             else{

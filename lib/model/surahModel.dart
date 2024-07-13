@@ -34,7 +34,8 @@ class SurahModel {
 class CustomListTileSurah extends StatelessWidget {
   final int index;
   final List<SurahAyahs> list;
-  const CustomListTileSurah({super.key, required this.index, required this.list});
+  final double fontsize;
+  const CustomListTileSurah({super.key, required this.index, required this.list, required this.fontsize});
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +51,47 @@ class CustomListTileSurah extends StatelessWidget {
           ]
         ),
         child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(list[index].ayahsNumber?.toString() ?? '', style:GoogleFonts.anticDidone(fontWeight: FontWeight.bold),),
+                    Text(list[index].ayahsText ?? '',
+                    style: GoogleFonts.charisSil(color: Colors.black, fontWeight: FontWeight.w700, fontSize: fontsize, ),
+                    textAlign: TextAlign.start,),
+                   
+                  ],
+                ),
+        );
+    
+  }
+}
+
+
+
+class CustomListTileSurahTranslation extends StatelessWidget {
+  final int index;
+  final List<SurahAyahs> list;
+  const CustomListTileSurahTranslation({super.key, required this.index, required this.list});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container( 
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 165, 243, 149),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 3.0
+            )
+          ]
+        ),
+        child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(list[index].ayahsNumber?.toString() ?? '', style:GoogleFonts.anticDidone(fontWeight: FontWeight.bold),),
                     Text(list[index].ayahsText ?? '',
                     style: GoogleFonts.charisSil(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20, ),
-                    textAlign: TextAlign.end,),
+                    textAlign: TextAlign.start,),
                    
                   ],
                 ),

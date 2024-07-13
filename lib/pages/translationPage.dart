@@ -1,27 +1,28 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:read_quran/model/constaant.dart';
+import 'package:read_quran/model/juzModel..dart';
+import 'package:http/http.dart' as http;
 import 'package:read_quran/model/sajdaModel.dart';
-import 'package:read_quran/model/surahModel.dart';
 import 'package:read_quran/model/surahlist.dart';
 import 'package:read_quran/pages/juz.dart';
-import 'package:read_quran/pages/sajda.dart';
-import 'package:read_quran/pages/surah.dart';
+import 'package:read_quran/pages/juzTranslation.dart';
+import 'package:read_quran/pages/surahTranslation.dart';
 
-class Quranpage extends StatefulWidget {
-  const Quranpage({Key? key}) : super(key: key);
+
+class Translation extends StatefulWidget {
+  const Translation({Key? key}) : super(key: key);
 
   @override
-  State<Quranpage> createState() => _QuranpageState();
+  State<Translation> createState() => _TranslationState();
 }
 
-class _QuranpageState extends State<Quranpage> {
-  final surahEndPoint = 'http://api.alquran.cloud/v1/surah';
+class _TranslationState extends State<Translation> {
+
+   final surahEndPoint = 'http://api.alquran.cloud/v1/surah';
   List<Surah> list = [];
 
   Future<List<Surah>> getSurah() async {
@@ -41,7 +42,7 @@ class _QuranpageState extends State<Quranpage> {
   }
 
   Future<SajdaModel> getSajda() async {
-    String sajdaendpoint = 'https://api.alquran.cloud/v1/sajda/quran-uthmani ';
+    String sajdaendpoint = 'http://api.alquran.cloud/v1/sajda/en.asad';
     final res = await http.get(Uri.parse(sajdaendpoint));
     if (res.statusCode == 200) {
       return SajdaModel.fromJSON(json.decode(res.body));
@@ -50,9 +51,10 @@ class _QuranpageState extends State<Quranpage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+     return DefaultTabController(
       length: 3,
       initialIndex: 0,
       child: SafeArea(
@@ -60,7 +62,7 @@ class _QuranpageState extends State<Quranpage> {
             appBar: AppBar(
               backgroundColor: Colors.green,
               title: Text(
-                'Quran',
+                'Translation',
                 style: GoogleFonts.acme(
                     fontSize: 25,
                     color: Colors.black,
@@ -72,9 +74,9 @@ class _QuranpageState extends State<Quranpage> {
                     style: GoogleFonts.acme(fontSize: 20, color: Colors.black)),
                 Text("Juz",
                     style: GoogleFonts.acme(fontSize: 20, color: Colors.black)),
-                Text("Sajda",
+               Text("Sajda",
                     style: GoogleFonts.acme(fontSize: 20, color: Colors.black)),
-              ]),
+               ]),
             ),
             body: TabBarView(children: <Widget>[
               FutureBuilder(
@@ -89,14 +91,14 @@ class _QuranpageState extends State<Quranpage> {
                             surah: surah[index],
                             context: context,
                             onTap: () {
-                              setState(() {
-                                Constants.SurahIndex = (index + 1);
-                              });
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SurahScreen()),
-                              );
+                               setState(() {
+                            Constants.SurahIndex = (index + 1);
+                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SurahTranslationPage()),
+                          );
                             }),
                       );
                     }
@@ -118,7 +120,7 @@ class _QuranpageState extends State<Quranpage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const JuzScreen()),
+                                builder: (context) => const JuzTranslationPage()),
                           );
                         },
                         child: Card(
@@ -140,6 +142,7 @@ class _QuranpageState extends State<Quranpage> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
+                                
                               ],
                             ),
                           ),
@@ -170,8 +173,10 @@ class _QuranpageState extends State<Quranpage> {
                       );
                     }
                   }),
+
             ])),
       ),
     );
+
   }
 }

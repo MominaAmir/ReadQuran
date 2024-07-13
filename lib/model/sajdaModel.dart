@@ -2,43 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:read_quran/pages/quran.dart';
 
-class JuzAyahs {
+
+class SajdaAyahs {
   final String ayahsText;
   final int  ayahsNumber; 
   final String surahName;
+  final int sajdaNumber;
+  final int juzNumber;
 
-  JuzAyahs({required this.ayahsText, required this.ayahsNumber, required this.surahName});
+  SajdaAyahs({required this.ayahsText, required this.ayahsNumber, required this.surahName, required this.sajdaNumber, required this.juzNumber});
 
-  factory JuzAyahs.fromJSON(Map<String, dynamic> json) {
-    return JuzAyahs(
+  factory SajdaAyahs.fromJSON(Map<String, dynamic> json) {
+    return SajdaAyahs(
       ayahsText: json['text'], 
       ayahsNumber: json['number'], 
-      surahName: json['surah']['name']);
+      surahName: json['surah']['name'],
+      sajdaNumber: json['sajda']['id'],
+      juzNumber: json['juz']);
   }
 }
 
-class JuzModel {
-  final int? juzNumber;
-  final List<JuzAyahs> juzayahs;
+class SajdaModel {
+  final List<SajdaAyahs> sajdaAyahs;
 
-  JuzModel({required this.juzNumber, required this.juzayahs});
+  SajdaModel({required this.sajdaAyahs});
 
-   factory JuzModel.fromJSON(Map<String, dynamic> json) {
-    Iterable juzayahs = json['data']['ayahs'];
-    List<JuzAyahs> juzAyahsList = juzayahs.map((e) => JuzAyahs.fromJSON(e)).toList();
-    return JuzModel(
-      juzNumber: json['data']['number'], 
-      juzayahs: juzAyahsList, );
+   factory SajdaModel.fromJSON(Map<String, dynamic> json) {
+    Iterable sajdaAyahs = json['data']['ayahs'];
+    List<SajdaAyahs> sajdaAyahsList = sajdaAyahs.map((e) => SajdaAyahs.fromJSON(e)).toList();
+    return SajdaModel(
+      sajdaAyahs: sajdaAyahsList, );
   }
 }
 
 
-class CustomListTileJuz extends StatelessWidget {
-  final double fontsize;
+class CustomListTileSajda extends StatelessWidget {
   final int index;
-  final List<JuzAyahs> list;
-  const CustomListTileJuz({super.key, required this.index, required this.list , required this.fontsize});
-
+  final List<SajdaAyahs> list;
+  const CustomListTileSajda({super.key, required this.index, required this.list});
+  
   @override
   Widget build(BuildContext context) {
     return Container( 
@@ -55,12 +57,18 @@ class CustomListTileJuz extends StatelessWidget {
         child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(list[index].ayahsNumber.toString() ?? '', style:GoogleFonts.anticDidone(fontWeight: FontWeight.bold),),
+                    Text('Sajda No: '+ list[index].sajdaNumber.toString() ?? '',style:TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.start,),
+                     Text('Juz No: '+ list[index].juzNumber.toString() ?? '',style:TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.start,),
+                    Text(list[index].ayahsNumber.toString() ?? '', style:GoogleFonts.anticDidone(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.end,),
                     Text(list[index].ayahsText ?? '',
-                    style: GoogleFonts.charisSil(color: Colors.black, fontWeight: FontWeight.w700, fontSize: fontsize, ),
+                    style: GoogleFonts.charisSil(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20, ),
                     textAlign: TextAlign.end,),
                     Text(list[index].surahName ?? '',
                     textAlign: TextAlign.end,),
+                    
                   ],
                 ),
         );
@@ -72,9 +80,8 @@ class CustomListTileJuz extends StatelessWidget {
 
 class CustomListTileJuzTranslation extends StatelessWidget {
   final int index;
-  final double fontSize;
-  final List<JuzAyahs> list;
-  const CustomListTileJuzTranslation({super.key, required this.index, required this.list, required this.fontSize});
+  final List<SajdaAyahs> list;
+  const CustomListTileJuzTranslation({super.key, required this.index, required this.list});
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +101,7 @@ class CustomListTileJuzTranslation extends StatelessWidget {
                   children: [
                     Text(list[index].ayahsNumber.toString() ?? '', style:GoogleFonts.anticDidone(fontWeight: FontWeight.bold),),
                     Text(list[index].ayahsText ?? '',
-                    style: GoogleFonts.charisSil(color: Colors.black, fontWeight: FontWeight.w700, fontSize: fontSize, ),
+                    style: GoogleFonts.charisSil(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20, ),
                     textAlign: TextAlign.start,),
                     Text(list[index].surahName ?? '',
                     textAlign: TextAlign.end,),
